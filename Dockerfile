@@ -24,3 +24,5 @@ RUN pip install --no-cache /wheels/*
 # Create user and set ownershipe and permission as required
 RUN adduser -D python-user && chown -R python-user /app
 USER python-user
+
+EXPOSE 3000
