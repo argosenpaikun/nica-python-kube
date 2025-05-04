@@ -21,8 +21,11 @@ COPY --from=builder /app/requirements.txt .
 
 RUN pip install --no-cache /wheels/*
 
-# Create user and set ownershipe and permission as required
-RUN adduser -D python-user && chown -R python-user /app
+# Create user and set ownership and permission as required
+RUN groupadd -g 1234 python-group && useradd -m -u 1234 -g python-group python-user && \
+    chown -R python-user:python-group /app
+
+# Switch to python-user
 USER python-user
 
 EXPOSE 3000
