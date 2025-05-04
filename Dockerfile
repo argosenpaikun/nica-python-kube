@@ -18,6 +18,7 @@ WORKDIR /app
 
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
+COPY src /app/src
 
 RUN pip install --no-cache /wheels/*
 
@@ -29,3 +30,5 @@ RUN groupadd -g 1234 python-group && useradd -m -u 1234 -g python-group python-u
 USER python-user
 
 EXPOSE 3000
+
+CMD [ "python", "src/main.py" ]
