@@ -21,3 +21,6 @@ COPY --from=builder /app/requirements.txt .
 
 RUN pip install --no-cache /wheels/*
 
+# Create user and set ownershipe and permission as required
+RUN adduser -D python-user && chown -R python-user:python-user /app
+USER python-user
