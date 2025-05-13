@@ -1,27 +1,23 @@
-from pywebio.platform.flask import start_server
+from pywebio.platform.flask import webio_view
 from pywebio.output import *
 from pywebio.session import *
 
 from dataclasses import dataclass
 
 from contents.hello import HelloPython
+from flask import Flask
 
-@dataclass
-class App:
+app = Flask(__name__)
 
-    '''
-    Initialize application
-    '''
-    def __init__(self):
-        self.hello = HelloPython()
+def task_func():
+    set_env(title='Hello Python', output_animation=False)
+    hello = HelloPython()
 
-    def index(self):
-        set_env(title='Hello Python', output_animation=False)
+    with use_scope(name='hello'):
+        hello.helloWorld()
+        hello.version()
 
-        with use_scope(name='hello'):
-            self.hello.helloWorld()
-            self.hello.version()
 
 if __name__ == '__main__':
-    app = App()
-    start_server(app.index, debug=True, port=3000)
+    app.add_url_rule('/', 'webio_view', webio_view(task_func), methods=['GET', 'POST', 'OPTIONS'])
+    app.run(host='0.0.0.0', debug=False, port=3000)
